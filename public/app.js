@@ -12,47 +12,72 @@ $(document).on("click", "#scrape-article", function() {
       for (var i = 0; i < data.length; i++) {
         // Display the apropos information on the page
         $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-        $("#articles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
+        $("#articles").append("<button class='mdl-button mdl-button--raised mdl-button--colored' data-id='" + data[i]._id + "' id='save'>Save </button>");
       }
     });
   });
 });
 
 
-
+//When someone clicks the save button on the artiicle, save it & render to the screen
 $(document).on("click", "#save", function() {
   var thisId = $(this).attr("data-id");
   console.log(thisId);
   $.get("/save/" + thisId, function(data) {
     alert(data);
   }).then(function(value) {
-    console.log("after scrape")
+    console.log("after save")
+    $("#articles").empty();
     $.getJSON("/articles", function(data) {
       // For each one
-      $("#articles").empty();
+      
       for (var i = 0; i < data.length; i++) {
         // Display the apropos information on the page
         $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-        $("#articles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
+        $("#articles").append("<button class='mdl-button mdl-button--raised mdl-button--colored' data-id='" + data[i]._id + "' id='save'>Save </button>");
       }
     });
   });
 
 });
 
-$(document).on("click", "#savedArticle", function() {
+//when someone clicks on savedarticle retrieve it
+$(document).on("click", "#saved-article", function() {
   $.getJSON("/savedarticles", function(data) {
     // For each one
+    console.log(data);
     $("#articles").empty();
-    $("#savedarticles").empty();
+    //$("#savedarticles").empty();
     for (var i = 0; i < data.length; i++) {
       // Display the apropos information on the page
       $("#savedarticles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-      $("#savedarticles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
+      $("#savedarticles").append("<button class='mdl-button mdl-button--raised mdl-button--colored' data-id='" + data[i]._id + "' id='save'>Save </button>");
     }
   });
 
 });
+// $(document).on("click", "#savedArticle", function() {
+//   $("#articles").empty();
+//   $("#savedarticles").empty();
+
+//   var thisId = $(this).attr("data-id");
+
+//   // Now make an ajax call for the Article
+//   $.ajax({
+//     method: "GET",
+//     url: "/savedarticles/" + thisId,
+//     data: {
+//       title: $()
+//    }
+//   })
+//     // With that done, add the note information to the page
+//     .done(function(data) {
+//       console.log(data);
+//       $("#savedarticles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+//       $("#savedarticles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
+//   });
+// });
+
 
 // Whenever someone clicks a p tag
 $(document).on("click", "p", function() {

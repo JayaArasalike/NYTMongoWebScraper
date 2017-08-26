@@ -132,7 +132,7 @@ app.get("/articles", function(req, res) {
 });
 
 
-// This will get the saved articles
+// This will retrieve the saved articles
 app.get("/savedarticles", function(req, res) {
   // Grab every doc in the Articles array
   SavedArticle.find({}, function(error, doc) {
