@@ -7,15 +7,52 @@ $(document).on("click", "#scrape-article", function() {
     $.getJSON("/articles", function(data) {
       // For each one
       $("#articles").empty();
+      $("#savedarticles").empty();
+      console.log(data);
       for (var i = 0; i < data.length; i++) {
         // Display the apropos information on the page
         $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-        $("#articles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data._id + "' id='savenote'>Save </button>");
+        $("#articles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
       }
     });
   });
 });
 
+
+
+$(document).on("click", "#save", function() {
+  var thisId = $(this).attr("data-id");
+  console.log(thisId);
+  $.get("/save/" + thisId, function(data) {
+    alert(data);
+  }).then(function(value) {
+    console.log("after scrape")
+    $.getJSON("/articles", function(data) {
+      // For each one
+      $("#articles").empty();
+      for (var i = 0; i < data.length; i++) {
+        // Display the apropos information on the page
+        $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+        $("#articles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
+      }
+    });
+  });
+
+});
+
+$(document).on("click", "#savedArticle", function() {
+  $.getJSON("/savedarticles", function(data) {
+    // For each one
+    $("#articles").empty();
+    $("#savedarticles").empty();
+    for (var i = 0; i < data.length; i++) {
+      // Display the apropos information on the page
+      $("#savedarticles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+      $("#savedarticles").append("<button class=\"mdl-button mdl-button--raised mdl-button--colored\" data-id='" + data[i]._id + "' id='save'>Save </button>");
+    }
+  });
+
+});
 
 // Whenever someone clicks a p tag
 $(document).on("click", "p", function() {

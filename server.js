@@ -9,6 +9,7 @@ var mongoose = require("mongoose");
 // Requiring our Note and Article models
 var Note = require("./models/Note.js");
 var Article = require("./models/Article.js");
+var SavedArticle = require("./models/SavedArticle.js");
 // Our scraping tools
 var request = require("request");
 var cheerio = require("cheerio");
@@ -90,10 +91,51 @@ app.get("/scrape", function(req, res) {
   res.send("Scrape Complete");
 });
 
+//save article route
+app.get("/save/:id", function(req, res) {
+  console.log('id = ', req.params.id);
+  Article.findOne({"_id": req.params.id}, function(error, article) {
+    var result = {};
+    result.title = article.title;
+    result.link = article.link;
+    var entry = new SavedArticle(result);
+
+      entry.save(function(err, doc) {
+        // Log any errors
+        if (err) {
+          console.log('i = ', i, "  ", err);
+        }
+        // Or log the doc
+        else {
+          //console.log(doc);
+        }
+      });
+  }).then(function(value) {
+    Article.remove({"_id": req.params.id});
+    res.send("Article saved.");
+  });
+});
+
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
   Article.find({}, function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Or send the doc to the browser as a json object
+    else {
+      res.json(doc);
+    }
+  });
+});
+
+
+// This will get the saved articles
+app.get("/savedarticles", function(req, res) {
+  // Grab every doc in the Articles array
+  SavedArticle.find({}, function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);
