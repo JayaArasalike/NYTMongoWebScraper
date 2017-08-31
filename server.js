@@ -30,7 +30,9 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/week18day3mongoose");
+//mongoose.connect("mongodb://localhost/week18day3mongoose");
+mongoose.connect("mongodb://heroku_qs2rzwj2:ahqh7rohv5pck18g5fj0i24tj@ds111204.mlab.com:11204/heroku_qs2rzwj2")
+
 var db = mongoose.connection;
 
 // Show any mongoose errors
